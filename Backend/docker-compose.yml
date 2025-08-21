@@ -19,5 +19,17 @@ services:
     environment:
       - MONGO_URI=mongodb://mongo:27017/users
 
+  task-service:
+    build:
+      context: ./task-service
+      dockerfile: Dockerfile
+    container_name: task_service_container
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/tasks
+
 volumes:
   mongo_data:
