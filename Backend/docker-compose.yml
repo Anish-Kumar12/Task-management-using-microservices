@@ -12,7 +12,7 @@ services:
     container_name: rabbitmq_container
     ports:
       - "5672:5672"
-      - "15672:15672"
+      - "15672:15672" # Management UI
 
   user-service:
     build:
@@ -38,6 +38,19 @@ services:
       - rabbitmq
     environment:
       - MONGO_URI=mongodb://mongo:27017/tasks
+    
+  notification-service:
+    build:
+      context: ./notification-service
+      dockerfile: Dockerfile
+    container_name: notification_service_container
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mongo
+      - rabbitmq
+    environment:
+      - RABBITMQ_URL=amqp://rabbitmq_container
 
 volumes:
   mongo_data:
